@@ -1,0 +1,55 @@
+.bg-primary {
+    background-color: #F5F3F0;
+}
+
+.primary-color {
+    background-color: #FEBD2E !important;
+}
+
+.primary-text-color {
+    color: #FEBD2E !important;
+}
+
+.black-text-color {
+    color: #333333 !important;
+}
+
+.secondary-text-color {
+    color: #F4A16E !important;
+}
+
+.category-color {
+    background-color: #FFF5E1 !important;
+}
+
+.button-text {
+    font-size: 14px !important;
+    font-weight: 500 !important;
+}
+
+.body-text {
+    font-size: 16px !important;
+    font-weight: 400 !important;
+}
+
+.white {
+    background-color: white !important;
+}
+
+.form-color {
+    background-color: #FAFAFA !important;
+}
+
+.no-border {
+    border: none !important;
+}
+
+.title-text {
+    font-size: 36px !important;
+    font-weight: 500 !important;
+}
+
+.no-decor {
+    text-decoration: none !important;
+}
+

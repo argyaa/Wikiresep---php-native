@@ -54,9 +54,9 @@ $no = 0;
                     <div class="pt-5 pl-5 title-text pb-3">Jangan takut ga bisa masak! <br> Kamu bisa belajar disini!</div>
                     <div class="body-text pl-5 pb-5">Kamu juga bisa jelajahi semua resep atau buat resepmu <br>
                         sendiri dan jadi banyak dikenal orang! </div>
-                    <a href="/view/auth/login.php" class="px-4 py-3 ml-5 rounded-pill button-text black-text-color white no-decor">Jadilah Terkenal Sekarang!</a>
+                    <a href="view/auth/login.php" class="px-4 py-3 ml-5 rounded-pill button-text black-text-color white no-decor">Jadilah Terkenal Sekarang!</a>
                     <div class="pb-1"></div>
-                    <img src="/assets/hero.svg" class="hero" alt="">
+                    <img src="assets/hero.svg" class="hero" alt="">
                 </div>
 
             </div>
@@ -65,7 +65,7 @@ $no = 0;
             <div class="col-6">
                 <div class="input-group pl-3 white rounded-pill">
                     <span class="mt-1">
-                        <img src="/assets/search_icon.svg" class="text-center" alt="">
+                        <img src="assets/search_icon.svg" class="text-center" alt="">
                     </span>
                     <input type="text" class="form-control search" placeholder="Cari resep, Kategori, Author" />
                 </div>
@@ -79,7 +79,7 @@ $no = 0;
                     <?php foreach ($data as $key => $val) { ?>
                         <input type="radio" class="kategori" id="kategori<?= $key ?>" name="kategori" value="<?= $val['id'] ?>" data-category="<?= $key ?>">
                         <label for="kategori<?= $key ?>" class="body-text black-text-color button-category px-2 py-2 mb-3 rounded-pill" id="labelKategori<?= $key ?>">
-                            <img src="/assets/<?= $no++ ?>.svg" class="pr-2" alt="">
+                            <img src="assets/<?= $no++ ?>.svg" class="pr-2" alt="">
                             <?= $val['nama'] ?>
 
                         </label>
@@ -99,7 +99,7 @@ $no = 0;
 
             </div>
             <div class="col-9">
-                <a href="/view/detail_resep.php" class="no-decor">
+                <a href="view/detail_resep.php" class="no-decor">
                     <div class="card resep-item mb-3">
                         <div class="row no-gutters">
                             <div class="col-md-5">

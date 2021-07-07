@@ -72,6 +72,7 @@ input.search {
 
 .auth {
     padding-left: 24px;
+    padding-right: 24px;
 }
 
 .button-category {
@@ -103,6 +104,7 @@ input.kategori[type="radio"] {
 
 .card-body-resep {
     height: 40vh !important;
+
 }
 
 .resep-item {
@@ -134,4 +136,38 @@ input.kategori[type="radio"] {
     bottom: 16px;
     z-index: 2 !important;
     width: fit-content !important;
+}
+
+.aksi{
+    border: 2px solid #FEBD2E;
+    color: #FEBD2E;
+    border-radius: 15px;
+}
+
+.aksi:hover{
+    background-color: #FEBD2E;
+    color: #333333;
+    border-radius: 15px;
+}
+
+.aksi-cont{
+    position: absolute;
+    bottom:  3vh;
+    right: 3vw;
+}
+
+.img-card{
+    border-radius: 25px;
+}
+
+.card-resep{
+    height: 90vh;
+}
+
+.card-body-manage-resep{
+    height: 55vh;
+}
+
+.text-area{
+    border-radius: 25px;
 }

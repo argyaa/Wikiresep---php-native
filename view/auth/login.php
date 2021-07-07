@@ -1,3 +1,9 @@
+<?php
+// include('../../service/koneksi.php', '../../service/error.php');
+include_once('../../service/koneksi.php');
+include_once('../../service/error.php');
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -23,15 +29,36 @@
             <div class="col-5 container container-regis px-5 py-3">
                 <form action="" method="POST" class="mt-4">
                     <div class="logo black-text-color text-center mb-5"><span class="primary-text-color">WIKI</span>Resep</div>
+                    <?php
+                    $db = dbConnect();
+                    if (isset($_POST['login'])) {
+                        if ($db->connect_errno == 0) {
+                            $username = $db->escape_string($_POST['username']);
+                            $password = $db->escape_string($_POST['password']);
+                            $sql = "SELECT * FROM user WHERE username = '$username' AND `password` = '$password'";
+                            $res = $db->query($sql);
+                            if ($res) {
+                                if ($res->num_rows == 1) {
+                                    $data = $res->fetch_assoc();
+                                    session_start();
+                                    $_SESSION['username'] = $data['username'];
+                                    header('location: ../manage_resep.php');
+                                } else {
+                                    showError("Username & Password Anda Salah!");
+                                }
+                            }
+                        }
+                    }
+                    ?>
                     <div class="form-group mb-4">
                         <label class="body-text black-text-color" for="exampleInputEmail1">Username</label>
-                        <input type="text" name="username" placeholder="masukkan username" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" require autocomplete="FALSE">
+                        <input type="text" name="username" placeholder="masukkan username" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required autocomplete="FALSE">
                     </div>
                     <div class="form-group mb-4">
                         <label class="body-text black-text-color" for="exampleInputPassword1">Password</label>
-                        <input type="password" name="password" placeholder="masukkan password" class="form-control auth no-border rounded-pill form-color" id="exampleInputPassword1" require autocomplete="FALSE">
+                        <input type="password" name="password" placeholder="masukkan password" class="form-control auth no-border rounded-pill form-color" id="exampleInputPassword1" required autocomplete="FALSE">
                     </div>
-                    <button type="button" name="login" class="py-2 rounded-pill primary-color mb-3 mt-5 btn-block black-text-color button-text no-border">Masuk</button>
+                    <button name="login" class="py-2 rounded-pill primary-color mb-3 mt-5 btn-block black-text-color button-text no-border">Masuk</button>
                 </form>
                 <div class="button-text black-text-color mt-4 mb-3">Belum punya akun? <a href="regis.php" class="primary-text-color">Daftar disini</a></div>
             </div>

@@ -1,3 +1,5 @@
+<?php include_once('../service/koneksi.php');
+session_start(); ?>
 <!doctype html>
 <html lang="en">
 
@@ -13,8 +15,8 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
     <title>Hello, world!</title>
-    <link rel="stylesheet" href="/style/theme.css">
-    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="../style/theme.css">
+    <link rel="stylesheet" href="../style/main.css">
 </head>
 
 <body>
@@ -27,10 +29,10 @@
         <div class="collapse navbar-collapse" id="n avbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active mr-4">
-                    <a class="nav-link button-text" href="view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
+                    <a class="nav-link button-text" href="../view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
+                    <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="../view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
                 </li>
 
             </ul>
@@ -48,7 +50,7 @@
             </div>
 
         </div>
-        <a class="px-4 py-3 primary-color rounded-pill button-text no-decor black-text-color" href="/view/resep/tambah_resep.php">+Tambah Resep</a>
+        <a class="px-4 py-3 primary-color rounded-pill button-text no-decor black-text-color" href="resep/tambah_resep.php">+Tambah Resep</a>
     </div>
     <div class="px-5">
         <div class="row mt-5">
@@ -62,7 +64,7 @@
                         </div>
                         <div class="card-body-manage-resep parent px-4 py-4">
                             <h5 class="card-title black-text-color mb-1">Roti Sobek Daging Asap</h5>
-                            <p class="author primary-text-color mb-4">oleh dandi</p>
+                            <p class="author primary-text-color mb-4">Oleh <?php echo $_SESSION["username"]; ?></p>
                             <p class="card-text black-text-color">Cocok dipadukan dengan secangkir kopi atau teh hangat. Yuk, cari tahu resep roti sobek smoked beef yang membuat momen bersama keluarga semakin istimewa!</p>
                             <div class="d-flex aksi-cont">
                                 <a href="#" class="no-decor aksi px-4 py-2 mr-3 button-text">Ubah</a>

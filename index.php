@@ -37,10 +37,10 @@ $no = 0;
         <div class="collapse navbar-collapse" id="n avbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active mr-4">
-                    <a class="nav-link button-text" href="/view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
+                    <a class="nav-link button-text" href="view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="/view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
+                    <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
                 </li>
 
             </ul>

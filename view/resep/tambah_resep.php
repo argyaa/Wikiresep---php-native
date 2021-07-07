@@ -13,9 +13,9 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
     <title>Hello, world!</title>
-    <link rel="stylesheet" href="/style/theme.css">
-    <link rel="stylesheet" href="/style/main.css">
-    <link rel="stylesheet" href="/style/trumbowyg.min.css">
+    <link rel="stylesheet" href="../../style/theme.css">
+    <link rel="stylesheet" href="../../style/main.css">
+    <link rel="stylesheet" href="../../style/trumbowyg.min.css">
 </head>
 
 <body>
@@ -29,10 +29,10 @@
         <div class="collapse navbar-collapse" id="n avbarSupportedContent">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active mr-4">
-                    <a class="nav-link button-text" href="view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
+                    <a class="nav-link button-text" href="../auth/login.php">Masuk <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link px-4 py-2 primary-color rounded-pill button-text" href="view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
+                    <a class="nav-link px-4 py-2 primary-color rounded-pill button-text" href="../auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
                 </li>
 
             </ul>

@@ -1,3 +1,9 @@
+<?php
+include_once('../../service/koneksi.php');
+include_once('../../service/error.php');
+$db = dbConnect();
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -23,19 +29,38 @@
             <div class="col-5 container container-regis px-5 py-3">
                 <form action="" method="POST" class="mt-4">
                     <div class="logo black-text-color text-center mb-5"><span class="primary-text-color">WIKI</span>Resep</div>
+                    <?php
+                    if (isset($_POST['daftar'])) {
+                        if ($db->connect_errno == 0) {
+                            $username = $db->escape_string($_POST['username']);
+                            $password = $db->escape_string($_POST['password']);
+                            $sql = "INSERT INTO user(username, `password`) VALUES ('$username', '$password')";
+                            $res = $db->query($sql);
+                            if ($res) {
+                                if ($db->affected_rows > 0) {
+                                    header("location: login.php");
+                                }
+                            } else {
+                                showError("Kesalahan Database!");
+                            }
+                        } else {
+                            showError("CONNECTION DATABASE ERROR!");
+                        }
+                    }
+                    ?>
                     <div class="form-group mb-4">
                         <label class="body-text black-text-color" for="exampleInputEmail1">Username</label>
-                        <input type="text" name="username" placeholder="masukkan username" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" require autocomplete="FALSE">
+                        <input type="text" name="username" placeholder="masukkan username" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required autocomplete="FALSE">
                     </div>
                     <div class="form-group mb-4">
                         <label class="body-text black-text-color" for="exampleInputPassword1">Password</label>
-                        <input type="password" name="password" placeholder="masukkan password" class="form-control auth no-border rounded-pill form-color" id="exampleInputPassword1" require autocomplete="FALSE">
+                        <input type="password" name="password" placeholder="masukkan password" class="form-control auth no-border rounded-pill form-color" id="exampleInputPassword1" required autocomplete="FALSE">
                     </div>
                     <div class="form-group mt-3">
                         <label class="body-text black-text-color" for="exampleInputPassword1">Konfirmasi Password</label>
-                        <input type="password" name="password" placeholder="masukkan ulang password" class="form-control auth no-border rounded-pill form-color" id="exampleInputPassword1" require autocomplete="FALSE">
+                        <input type="password" name="password" placeholder="masukkan ulang password" class="form-control auth no-border rounded-pill form-color" id="exampleInputPassword1" required autocomplete="FALSE">
                     </div>
-                    <button type="button" name="login" class="py-2 rounded-pill primary-color mb-3 mt-5 btn-block black-text-color button-text no-border">Daftar</button>
+                    <button name="daftar" class="py-2 rounded-pill primary-color mb-3 mt-5 btn-block black-text-color button-text no-border">Daftar</button>
                 </form>
                 <div class="button-text black-text-color mt-4 mb-3">Sudah punya akun? <a href="login.php" class="primary-text-color">Masuk disini</a></div>
             </div>

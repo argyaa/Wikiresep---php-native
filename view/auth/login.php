@@ -13,8 +13,8 @@
     <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
     <title>Hello, world!</title>
-    <link rel="stylesheet" href="/style/theme.css">
-    <link rel="stylesheet" href="/style/main.css">
+    <link rel="stylesheet" href="../../style/theme.css">
+    <link rel="stylesheet" href="../../style/main.css">
 </head>
 
 <body>
@@ -33,7 +33,7 @@
                     </div>
                     <button type="button" name="login" class="py-2 rounded-pill primary-color mb-3 mt-5 btn-block black-text-color button-text no-border">Masuk</button>
                 </form>
-                <div class="button-text black-text-color mt-4 mb-3">Belum punya akun? <a href="/view/auth/regis.php" class="primary-text-color">Daftar disini</a></div>
+                <div class="button-text black-text-color mt-4 mb-3">Belum punya akun? <a href="regis.php" class="primary-text-color">Daftar disini</a></div>
             </div>
         </div>
     </div>

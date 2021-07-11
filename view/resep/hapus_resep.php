@@ -8,7 +8,7 @@ session_start();
 <html lang="en">
 
 <head>
-  <!-- Required meta tags -->
+  <!-- Required readonly meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -39,8 +39,8 @@ session_start();
             Hai, <?php echo $_SESSION['username']; ?>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <button class="dropdown-item" href="" name="kelola-user">Kelola User</button>
-            <button class="dropdown-item" href="" name="kelola-resep">Kelola Resep</button>
+            <a class="dropdown-item" href="" name="kelola-user">Kelola User</a>
+            <a class="dropdown-item" href="../manage_resep.php" name="kelola-resep">Kelola Resep</a>
             <button class="dropdown-item" href="" name="keluar">Keluar</button>
           </div>
         </div>
@@ -56,25 +56,17 @@ session_start();
     <div class="container">
       <div class="row mt-3 pt-4">
         <?php
-        if (isset($_POST['btn-simpan'])) {
+        if (isset($_POST['btn-hapus'])) {
           $id = $db->escape_string($_GET['id']);
-          $judul = $db->escape_string($_POST['judul']);
-          $gambar = $db->escape_string($_POST['gambar']);
-          $jenis = $db->escape_string($_POST['jenis']);
-          $deskripsi = $db->escape_string($_POST['deskripsi']);
-          $konten = $db->escape_string($_POST['konten']);
 
-          $sql = "UPDATE resep SET judul = '$judul', gambar = '$gambar', id_kategori = '$jenis', deskripsi = '$deskripsi', konten ='$konten' WHERE id = '$id'";
+          $sql = "DELETE FROM resep WHERE id = '$id'";
           $res = $db->query($sql);
           if ($res) {
             if ($db->affected_rows > 0) {
-              showMessage('success', 'Success', 'check-circle', 'Data Berhasil Di Ubah!');
-            } else {
-              showMessage('info', 'Info', 'exclamation-triangle', 'Data Tidak Ada Yang Di Ubah!');
+              showMessage('success', 'Success', 'check-circle', 'Data Berhasil Di Hapus!');
             }
           } else {
-            echo $db->error;
-            // showMessage('danger', 'Danger', 'exclamation-triangle', 'Database Error!');
+            showMessage('danger', 'Danger', 'exclamation-triangle', 'Database Error!');
           }
         }
         ?>
@@ -84,29 +76,21 @@ session_start();
           <div class="col-5 mr-0">
             <div class="form-group mb-4">
               <label class="body-text black-text-color" for="exampleInputEmail1">Judul</label>
-              <input type="text" name="judul" placeholder="masukkan judul resep" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required autocomplete="FALSE" value="<?php echo $resep['judul']; ?>">
+              <input type="text" name="judul" placeholder="masukkan judul resep" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required readonly autocomplete="FALSE" value="<?php echo $resep['judul']; ?>">
             </div>
             <div class="form-group mb-4">
               <label class="body-text black-text-color" for="exampleInputEmail1">Gambar</label>
-              <input type="text" name="gambar" placeholder="masukkan link gambar" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required autocomplete="FALSE" value="<?php echo $resep['gambar']; ?>">
+              <input type="text" name="gambar" placeholder="masukkan link gambar" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required readonly autocomplete="FALSE" value="<?php echo $resep['gambar']; ?>">
             </div>
             <div class="form-group mb-4">
               <label class="body-text black-text-color" for="exampleInputPassword1">Jenis Resep</label>
-              <select class="form-control auth no-border rounded-pill form-color" name="jenis">
-                <?php
-                $data = getKategori();
-                foreach ($data as $jenis) {
-                ?>
-                  <option value="<?php echo $jenis['id']; ?>" <?php if ($jenis['id'] == $resep['id_kategori']) echo 'selected'; ?>><?php echo $jenis['nama']; ?></option>
-                <?php
-                }
-                ?>
-              </select>
+              <input type="text" name="gambar" placeholder="masukkan link gambar" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required readonly autocomplete="FALSE" value="<?php echo $resep['nama']; ?>">
+
             </div>
 
             <div class="form-group">
               <label for="exampleFormControlTextarea1">Deskripsi</label>
-              <textarea class="form-control text-area auth no-border form-color" id="exampleFormControlTextarea1" rows="3" name="deskripsi" required><?php echo $resep['deskripsi']; ?></textarea>
+              <textarea class="form-control text-area auth no-border form-color" id="exampleFormControlTextarea1" rows="3" name="deskripsi" required readonly><?php echo $resep['deskripsi']; ?></textarea>
             </div>
 
 
@@ -116,12 +100,12 @@ session_start();
             <div class="container-textarea">
               <div class="form-group">
                 <label for="trumbowyg-text">Bahan & Langkah Pembuatan</label>
-                <textarea class="form-control text-area auth no-border form-color" name="konten" id="trumbowyg-text" required autocomplete="FALSE"><?php echo $resep['konten']; ?></textarea>
+                <textarea class="form-control text-area auth no-border form-color" name="konten" id="trumbowyg-text" required readonly disabled autocomplete="FALSE"><?php echo $resep['konten']; ?></textarea>
               </div>
             </div>
             <div class="row justify-content-end">
               <a class="aksi px-4 pt-2 rounded-pill button-text no-decor black-text-color" href="../manage_resep.php">Batalkan</a>
-              <button class="btn primary-color px-3 py-2 rounded-pill ml-4" name="btn-simpan">Simpan </button>
+              <button class="btn primary-color px-3 py-2 rounded-pill ml-4" name="btn-hapus">Hapus</button>
             </div>
 
           </div>

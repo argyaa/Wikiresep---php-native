@@ -1,11 +1,46 @@
 <?php
 include_once("service/koneksi.php");
+include_once("service/error.php");
+session_start();
 $db = dbConnect();
-$sql = "SELECT * from kategori";
-$res = $db->query($sql);
-$data = $res->fetch_all(MYSQLI_ASSOC);
 $no = 0;
+$data = getKategori();
+// function keluar
+if (isset($_POST['keluar'])) {
+    session_destroy();
+    header('location: index.php');
+}
 
+//function cari
+$status = false;
+if (isset($_POST['btn-cari'])) {
+    $status = true;
+    $cari = $db->escape_string($_POST['cari']);
+    $sql = "SELECT * FROM resep
+                    JOIN user ON user.id = resep.id_user
+                    JOIN kategori ON kategori.id = resep.id_kategori
+                    WHERE judul LIKE '%$cari%'";
+}
+//function kategori
+else if (isset($_POST['btn-kategori'])) {
+    $kategori = $db->escape_string($_POST['kategori']);
+    if ($kategori == 1) {
+        $sql = "SELECT resep.id, judul, konten, username, nama, gambar, deskripsi from resep
+        JOIN user ON resep.id_user = user.id
+        JOIN kategori ON resep.id_kategori = kategori.id";
+    } else {
+        $sql = "SELECT resep.id, judul, konten, username, nama, gambar, deskripsi from resep
+        JOIN user ON resep.id_user = user.id
+        JOIN kategori ON resep.id_kategori = kategori.id
+        WHERE id_kategori = '$kategori'";
+    }
+}
+// function tampil seluruh resep 
+else {
+    $sql = "SELECT resep.id, judul, konten, username, nama, gambar, deskripsi from resep
+    JOIN user ON resep.id_user = user.id
+    JOIN kategori ON resep.id_kategori = kategori.id";
+}
 ?>
 
 <!doctype html>
@@ -29,22 +64,45 @@ $no = 0;
 
 <body>
     <nav class="px-5 navbar navbar-expand-lg navbar-light bg-transparent mt-2 black-text-color">
-        <a class="navbar-brand logo black-text-color" href="#"><span class="primary-text-color">WIKI</span>Resep</a>
+        <a class="navbar-brand logo black-text-color" href="index.php"><span class="primary-text-color">WIKI</span>Resep</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
-        <div class="collapse navbar-collapse" id="n avbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active mr-4">
-                    <a class="nav-link button-text" href="view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
-                </li>
+        <?php
+        if (!isset($_SESSION['id'])) {
+        ?>
+            <div class="collapse navbar-collapse" id="n avbarSupportedContent">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item active mr-4">
+                        <a class="nav-link button-text" href="view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
+            </div>
+        <?php
+        } else {
+        ?>
+            <div class="collapse navbar-collapse" id="n avbarSupportedContent">
+                <form action="" method="post" class="ml-auto">
+                    <div class="dropdown">
+                        <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Hai, <?php echo $_SESSION['username']; ?>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="view/manage_user.php" name="kelola-user">Kelola User</a>
+                            <a class="dropdown-item" href="view/manage_resep.php" name="kelola-resep">Kelola Resep</a>
+                            <button class="dropdown-item" href="" name="keluar">Keluar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
 
-            </ul>
-        </div>
+        <?php
+        }
+        ?>
     </nav>
 
     <div class="px-5 mt-3">
@@ -54,7 +112,11 @@ $no = 0;
                     <div class="pt-5 pl-5 title-text pb-3">Jangan takut ga bisa masak! <br> Kamu bisa belajar disini!</div>
                     <div class="body-text pl-5 pb-5">Kamu juga bisa jelajahi semua resep atau buat resepmu <br>
                         sendiri dan jadi banyak dikenal orang! </div>
-                    <a href="view/auth/login.php" class="px-4 py-3 ml-5 rounded-pill button-text black-text-color white no-decor">Jadilah Terkenal Sekarang!</a>
+                    <a href="view/auth/login.php" class="px-4 py-3 ml-5 rounded-pill button-text black-text-color white no-decor" style="visibility: <?php if (!isset($_SESSION['id'])) {
+                                                                                                                                                            echo "none";
+                                                                                                                                                        } else {
+                                                                                                                                                            echo "hidden";
+                                                                                                                                                        } ?>;">Jadilah Terkenal Sekarang!</a>
                     <div class="pb-1"></div>
                     <img src="assets/hero.svg" class="hero" alt="">
                 </div>
@@ -63,26 +125,34 @@ $no = 0;
         </div>
         <div class="row justify-content-center mt-5">
             <div class="col-6">
-                <div class="input-group pl-3 white rounded-pill">
-                    <span class="mt-1">
-                        <img src="assets/search_icon.svg" class="text-center" alt="">
-                    </span>
-                    <input type="text" class="form-control search" placeholder="Cari resep, Kategori, Author" />
-                </div>
-
+                <form action="" method="POST">
+                    <div class="input-group pl-3 white rounded-pill">
+                        <span class="mt-1">
+                            <img src="assets/search_icon.svg" class="text-center" alt="">
+                        </span>
+                        <input type="text" class="form-control search" placeholder="Cari resep, Kategori, Author" name="cari" />
+                        <button class="btn primary-color px-3 py-2 rounded-pill ml-4" name="btn-cari">Cari</button>
+                        <?php
+                        if ($status) {
+                            echo "<a href=\"index.php\" class=\"btn primary-color px-3 py-2 rounded-pill ml-4\">Refresh Data</a>";
+                        }
+                        ?>
+                    </div>
+                </form>
             </div>
         </div>
 
         <div class="row mt-5">
             <div class="col-3">
-                <form action="">
+                <form action="" method="POST">
                     <?php foreach ($data as $key => $val) { ?>
                         <input type="radio" class="kategori" id="kategori<?= $key ?>" name="kategori" value="<?= $val['id'] ?>" data-category="<?= $key ?>">
-                        <label for="kategori<?= $key ?>" class="body-text black-text-color button-category px-2 py-2 mb-3 rounded-pill" id="labelKategori<?= $key ?>">
-                            <img src="assets/<?= $no++ ?>.svg" class="pr-2" alt="">
-                            <?= $val['nama'] ?>
-
-                        </label>
+                        <button name='btn-kategori' class="no-border text-left no-color 0p 0m">
+                            <label for="kategori<?= $key ?>" class="body-text black-text-color  button-category px-2 py-2 mb-3 rounded-pill" id="labelKategori<?= $key ?>">
+                                <img src="assets/<?= $no++ ?>.svg" class="pr-2" alt="">
+                                <?= $val['nama'] ?>
+                            </label>
+                        </button>
                     <?php } ?>
                     <!-- <div class="cont mb-3">
                         <input type="radio" id="kategori">
@@ -96,30 +166,46 @@ $no = 0;
 
 
 
-
             </div>
             <div class="col-9">
-                <a href="view/detail_resep.php" class="no-decor">
-                    <div class="card resep-item mb-3">
-                        <div class="row no-gutters">
-                            <div class="col-md-5">
-                                <div class="parent">
-                                    <div class="kategori-badge rounded-pill category-color px-3 py-2 black-text-color">Roti & Kue</div>
-                                    <img src="https://www.masakapahariini.com/wp-content/uploads/2020/10/roti-sobek-smoked-beef-780x440.jpg" class="img-resep" alt="...">
+                <?php
+                $res = $db->query($sql);
+                if ($res) {
+                    if ($res->num_rows > 0) {
+                        $data = $res->fetch_all(MYSQLI_ASSOC);
+                        foreach ($data as $resep) {
+                ?>
+                            <a href="view/detail_resep.php?id=<?php echo $resep['id']; ?>" class="no-decor">
+                                <div class="card resep-item mb-3">
+                                    <div class="row no-gutters">
+                                        <div class="col-md-5">
+                                            <div class="parent">
+                                                <div class="kategori-badge rounded-pill category-color px-3 py-2 black-text-color"><?php echo $resep['nama']; ?></div>
+                                                <img src="<?php echo $resep['gambar']; ?>" class="img-resep" alt="...">
 
+                                            </div>
+                                        </div>
+                                        <div class="col-md-7">
+                                            <div class="card-body-resep px-4 py-4">
+                                                <h5 class="card-title black-text-color mb-1"><?php echo $resep['judul']; ?></h5>
+                                                <p class="author primary-text-color mb-4">Oleh <?php echo $resep['username']; ?></p>
+                                                <p class="body-text black-text-color"><?php echo $resep['deskripsi']; ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="col-md-7">
-                                <div class="card-body-resep px-4 py-4">
-                                    <h5 class="card-title black-text-color mb-1">Roti Sobek Daging Asap</h5>
-                                    <p class="author primary-text-color mb-4">oleh dandi</p>
-                                    <p class="body-text black-text-color">Cocok dipadukan dengan secangkir kopi atau teh hangat. Yuk, cari tahu resep roti sobek smoked beef yang membuat momen bersama keluarga semakin istimewa!</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </a>
+                            </a>
             </div>
+<?php
+                        }
+                    } else {
+                        if ($status) {
+                            showError("Judul : $cari Tidak Ada!");
+                        }
+                    }
+                }
+
+?>
         </div>
 
         <!-- Optional JavaScript; choose one of the two! -->

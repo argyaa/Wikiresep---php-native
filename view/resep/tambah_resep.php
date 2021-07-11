@@ -1,3 +1,20 @@
+<?php
+include_once('../../service/koneksi.php');
+include_once('../../service/error.php');
+
+session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ../../index.php');
+}
+
+$db = dbConnect();
+$data = getKategori();
+if (isset($_POST['keluar'])) {
+    session_destroy();
+    header('location: ../../index.php');
+}
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -21,48 +38,83 @@
 <body>
 
     <nav class="px-5 navbar navbar-expand-lg navbar-light bg-transparent mt-2 black-text-color">
-        <a class="navbar-brand logo black-text-color" href="#"><span class="primary-text-color">WIKI</span>Resep</a>
+        <a class="navbar-brand logo black-text-color" href="../../index.php"><span class="primary-text-color">WIKI</span>Resep</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="n avbarSupportedContent">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item active mr-4">
-                    <a class="nav-link button-text" href="../auth/login.php">Masuk <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link px-4 py-2 primary-color rounded-pill button-text" href="../auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
-                </li>
-
-            </ul>
+            <form action="" method="post" class="ml-auto">
+                <div class="dropdown">
+                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Hai, <?php echo $_SESSION['username']; ?>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="" name="kelola-user">Kelola User</a>
+                        <a class="dropdown-item" href="../manage_resep.php" name="kelola-resep">Kelola Resep</a>
+                        <button class="dropdown-item" href="" name="keluar">Keluar</button>
+                    </div>
+                </div>
+            </form>
         </div>
     </nav>
 
     <form action="" method="POST" class="mt-4">
         <div class="container">
             <div class="row mt-3 pt-4">
+                <?php
+                if (isset($_POST['btn-simpan'])) {
+                    $id_user = $_SESSION['id'];
+                    $judul = $db->escape_string($_POST['judul']);
+                    $gambar = $db->escape_string($_POST['gambar']);
+                    $id_kategori = $db->escape_string($_POST['jenis']);
+                    $deskripsi = $db->escape_string($_POST['deskripsi']);
+                    $konten = $db->escape_string($_POST['konten']);
+
+                    $sql = "INSERT INTO resep(judul, konten, id_kategori, id_user, gambar, deskripsi)
+    VALUES ('$judul', '$konten', $id_kategori, $id_user, '$gambar', '$deskripsi')";
+
+                    $res = $db->query($sql);
+                    if ($res) {
+                        if ($db->affected_rows > 0) {
+                            showMessage('success', 'Success', 'check-circle', 'Data Berhasil Tersimpan');
+                        } else {
+                            showMessage('info', 'Info', 'exclamation-triangle', 'Data Gagal Tersimpan');
+                        }
+                    } else {
+                        showMessage('danger', 'Danger', 'exclamation-triangle', 'Database Error.');
+                    }
+                }
+                ?>
                 <div class="row col-12 container container-regis px-5 py-3">
+
+
 
                     <div class="col-5 mr-0">
                         <div class="form-group mb-4">
                             <label class="body-text black-text-color" for="exampleInputEmail1">Judul</label>
-                            <input type="text" name="judul" placeholder="masukkan username" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" require autocomplete="FALSE">
+                            <input type="text" name="judul" placeholder="masukkan judul resep" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required autocomplete="FALSE">
                         </div>
                         <div class="form-group mb-4">
                             <label class="body-text black-text-color" for="exampleInputEmail1">Gambar</label>
-                            <input type="text" name="judul" placeholder="masukkan link gambar" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" require autocomplete="FALSE">
+                            <input type="text" name="gambar" placeholder="masukkan link gambar" class="form-control auth no-border rounded-pill form-color" id="exampleInputEmail1" aria-describedby="emailHelp" required autocomplete="FALSE">
                         </div>
                         <div class="form-group mb-4">
                             <label class="body-text black-text-color" for="exampleInputPassword1">Jenis Resep</label>
-                            <select class="form-control auth no-border rounded-pill form-color">
-                                <option>Roti & Kue</option>
+                            <select class="form-control auth no-border rounded-pill form-color" name="jenis">
+                                <?php
+                                foreach ($data as $jenis) {
+                                ?>
+                                    <option value="<?php echo $jenis['id']; ?>"><?php echo $jenis['nama']; ?></option>
+                                <?php
+                                }
+                                ?>
                             </select>
                         </div>
 
                         <div class="form-group">
                             <label for="exampleFormControlTextarea1">Deskripsi</label>
-                            <textarea class="form-control text-area auth no-border form-color" id="exampleFormControlTextarea1" rows="3"></textarea>
+                            <textarea class="form-control text-area auth no-border form-color" id="exampleFormControlTextarea1" rows="3" name="deskripsi" required></textarea>
                         </div>
 
 
@@ -71,12 +123,13 @@
 
                         <div class="container-textarea">
                             <div class="form-group">
-                                <textarea class="form-control" name="konten" id="trumbowyg-text" require autocomplete="FALSE"></textarea>
+                                <label for="trumbowyg-text">Bahan & Langkah Pembuatan</label>
+                                <textarea class="form-control text-area auth no-border form-color" name="konten" id="trumbowyg-text" required autocomplete="FALSE"></textarea>
                             </div>
                         </div>
                         <div class="row justify-content-end">
-                            <a class="aksi px-4 pt-2 rounded-pill button-text no-decor black-text-color" href="/view/resep/tambah_resep.php">Batalkan</a>
-                            <button type="submit" class="btn primary-color px-3 py-2 rounded-pill ml-4" value="">Simpan </button>
+                            <a class="aksi px-4 pt-2 rounded-pill button-text no-decor black-text-color" href="../manage_resep.php">Batalkan</a>
+                            <button class="btn primary-color px-3 py-2 rounded-pill ml-4" name="btn-simpan">Simpan </button>
                         </div>
 
                     </div>
@@ -101,9 +154,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.min.js" integrity="sha384-+YQ4JLhjyBLPDQt//I+STsc9iw4uQqACwlvpslubQzn4u2UU2UFM80nGisd026JF" crossorigin="anonymous"></script>
     -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="/js/trumbowyg.min.js"></script>
+    <script src="../../js/trumbowyg.min.js"></script>
     <script>
-        $.trumbowyg.svgPath = '/style/icons.svg';
+        $.trumbowyg.svgPath = '../../style/icons.svg';
     </script>
     <script type="text/javascript">
         $('#trumbowyg-text').trumbowyg()

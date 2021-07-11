@@ -41,10 +41,11 @@ include_once('../../service/error.php');
                                 if ($res->num_rows == 1) {
                                     $data = $res->fetch_assoc();
                                     session_start();
+                                    $_SESSION['id'] = $data['id'];
                                     $_SESSION['username'] = $data['username'];
-                                    header('location: ../manage_resep.php');
+                                    header('location: ../../index.php');
                                 } else {
-                                    showError("Username & Password Anda Salah!");
+                                    showError("Username Atau Password Anda Salah!");
                                 }
                             }
                         }

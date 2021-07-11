@@ -3,6 +3,9 @@ include_once('../../service/koneksi.php');
 include_once('../../service/error.php');
 $db = dbConnect();
 session_start();
+if (!isset($_SESSION['id'])) {
+  header('location: ../../index.php');
+}
 ?>
 <!doctype html>
 <html lang="en">

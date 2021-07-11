@@ -2,6 +2,9 @@
 require_once('../service/koneksi.php');
 $db = dbConnect();
 session_start();
+if (!isset($_SESSION['id'])) {
+    header('location: ../index.php');
+}
 if (isset($_POST['keluar'])) {
     session_destroy();
     header('location: ../index.php');

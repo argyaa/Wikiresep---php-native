@@ -122,7 +122,6 @@ input.kategori[type="radio"] {
     font-size: 14px;
 }
 
-
 .img-resep {
     width: 28vw;
     height: 40vh;
@@ -152,12 +151,14 @@ input.kategori[type="radio"] {
 
 .aksi-cont{
     position: absolute;
-    bottom:  3vh;
+    bottom: 3vh;
     right: 3vw;
 }
 
 .img-card{
     border-radius: 25px;
+    height: 35vh;
+    object-fit: cover;
 }
 
 .card-resep{

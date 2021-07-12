@@ -42,8 +42,8 @@ if (!isset($_SESSION['id'])) {
             Hai, <?php echo $_SESSION['username']; ?>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <button class="dropdown-item" href="" name="kelola-user">Kelola User</button>
-            <button class="dropdown-item" href="" name="kelola-resep">Kelola Resep</button>
+            <a class="dropdown-item" href="" name="kelola-user">Kelola User</a>
+            <a class="dropdown-item" href="../manage_resep.php" name="kelola-resep">Kelola Resep</a>
             <button class="dropdown-item" href="" name="keluar">Keluar</button>
           </div>
         </div>

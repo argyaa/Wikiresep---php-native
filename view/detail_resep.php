@@ -2,9 +2,6 @@
 require_once('../service/koneksi.php');
 $db = dbConnect();
 session_start();
-if (!isset($_SESSION['id'])) {
-    header('location: ../index.php');
-}
 if (isset($_POST['keluar'])) {
     session_destroy();
     header('location: ../index.php');
@@ -43,10 +40,10 @@ if (isset($_POST['keluar'])) {
             <div class="collapse navbar-collapse" id="n avbarSupportedContent">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item active mr-4">
-                        <a class="nav-link button-text" href="view/auth/login.php">Masuk <span class="sr-only">(current)</span></a>
+                        <a class="nav-link button-text" href="auth/login.php">Masuk <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="view/auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
+                        <a class="nav-link px-4 ly-2 primary-color rounded-pill button-text" href="auth/regis.php">Daftar <span class="sr-only">(current)</span></a>
                     </li>
                 </ul>
             </div>
@@ -60,7 +57,9 @@ if (isset($_POST['keluar'])) {
                             Hai, <?php echo $_SESSION['username']; ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="manage_user.php" name="kelola-user">Kelola User</a>
+                            <?php if ($_SESSION['username'] == "admin") { ?>
+                                <a class="dropdown-item" href="manage_user.php" name="kelola-user">Kelola User</a>
+                            <?php } ?>
                             <a class="dropdown-item" href="manage_resep.php" name="kelola-resep">Kelola Resep</a>
                             <button class="dropdown-item" href="" name="keluar">Keluar</button>
                         </div>

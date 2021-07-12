@@ -42,7 +42,9 @@ if (!isset($_SESSION['id'])) {
             Hai, <?php echo $_SESSION['username']; ?>
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="" name="kelola-user">Kelola User</a>
+            <?php if ($_SESSION['username'] == "admin") { ?>
+              <a class="dropdown-item" href="../manage_user.php" name="kelola-user">Kelola User</a>
+            <?php } ?>
             <a class="dropdown-item" href="../manage_resep.php" name="kelola-resep">Kelola Resep</a>
             <button class="dropdown-item" href="" name="keluar">Keluar</button>
           </div>
@@ -71,9 +73,9 @@ if (!isset($_SESSION['id'])) {
           $res = $db->query($sql);
           if ($res) {
             if ($db->affected_rows > 0) {
-              showMessage('success', 'Success', 'check-circle', 'Data Berhasil Di Ubah!');
+              showMessage('success', 'Data Berhasil Di Ubah!');
             } else {
-              showMessage('info', 'Info', 'exclamation-triangle', 'Data Tidak Ada Yang Di Ubah!');
+              showMessage('info', 'Data Tidak Ada Yang Di Ubah!');
             }
           } else {
             echo $db->error;

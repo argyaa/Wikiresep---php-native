@@ -50,7 +50,9 @@ if (isset($_POST['keluar'])) {
                         Hai, <?php echo $_SESSION['username']; ?>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="" name="kelola-user">Kelola User</a>
+                        <?php if ($_SESSION['username'] == "admin") { ?>
+                            <a class="dropdown-item" href="../manage_user.php" name="kelola-user">Kelola User</a>
+                        <?php } ?>
                         <a class="dropdown-item" href="../manage_resep.php" name="kelola-resep">Kelola Resep</a>
                         <button class="dropdown-item" href="" name="keluar">Keluar</button>
                     </div>
@@ -77,12 +79,12 @@ if (isset($_POST['keluar'])) {
                     $res = $db->query($sql);
                     if ($res) {
                         if ($db->affected_rows > 0) {
-                            showMessage('success', 'Success', 'check-circle', 'Data Berhasil Tersimpan');
+                            showMessage('success', 'Data Berhasil Tersimpan');
                         } else {
-                            showMessage('info', 'Info', 'exclamation-triangle', 'Data Gagal Tersimpan');
+                            showMessage('info', 'Data Gagal Tersimpan');
                         }
                     } else {
-                        showMessage('danger', 'Danger', 'exclamation-triangle', 'Database Error.');
+                        showMessage('danger', 'Database Error.');
                     }
                 }
                 ?>

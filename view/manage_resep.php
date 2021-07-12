@@ -60,7 +60,9 @@ if (isset($_POST['btn-cari'])) {
                         Hai, <?php echo $_SESSION['username']; ?>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="manage_user.php" name="kelola-user">Kelola User</a>
+                        <?php if ($_SESSION['username'] == "admin") { ?>
+                            <a class="dropdown-item" href="manage_user.php" name="kelola-user">Kelola User</a>
+                        <?php } ?>
                         <a class="dropdown-item" href="manage_resep.php" name="kelola-resep">Kelola Resep</a>
                         <button class="dropdown-item" href="" name="keluar">Keluar</button>
                     </div>
@@ -70,7 +72,7 @@ if (isset($_POST['btn-cari'])) {
     </nav>
 
 
-    <div class="row justify-content-between px-5 mt-5">
+    <div class="row justify-content-between px-5 mt-5 mx-0">
         <div class="col-8">
             <form action="" method="post">
                 <div class="input-group pl-3 white rounded-pill">
@@ -131,7 +133,6 @@ if (isset($_POST['btn-cari'])) {
             <!-- NOTE  : SAMPE SINI -->
         </div>
     </div>
-
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->

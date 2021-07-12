@@ -13,17 +13,17 @@ if (isset($_POST['keluar'])) {
 
 //function cari
 $status = false;
-if (isset($_POST['btn-cari'])) {
+if (isset($_GET['cari'])) {
     $status = true;
-    $cari = $db->escape_string($_POST['cari']);
+    $cari = $db->escape_string($_GET['cari']);
     $sql = "SELECT * FROM resep
                     JOIN user ON user.id = resep.id_user
                     JOIN kategori ON kategori.id = resep.id_kategori
                     WHERE judul LIKE '%$cari%'";
 }
 //function kategori
-else if (isset($_POST['btn-kategori'])) {
-    $kategori = $db->escape_string($_POST['kategori']);
+else if (isset($_GET['kategori'])) {
+    $kategori = $db->escape_string($_GET['kategori']);
     if ($kategori == 1) {
         $sql = "SELECT resep.id, judul, konten, username, nama, gambar, deskripsi from resep
         JOIN user ON resep.id_user = user.id
@@ -92,7 +92,9 @@ else {
                             Hai, <?php echo $_SESSION['username']; ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="view/manage_user.php" name="kelola-user">Kelola User</a>
+                            <?php if ($_SESSION['username'] == "admin") { ?>
+                                <a class="dropdown-item" href="view/manage_user.php" name="kelola-user">Kelola User</a>
+                            <?php } ?>
                             <a class="dropdown-item" href="view/manage_resep.php" name="kelola-resep">Kelola Resep</a>
                             <button class="dropdown-item" href="" name="keluar">Keluar</button>
                         </div>
@@ -125,13 +127,13 @@ else {
         </div>
         <div class="row justify-content-center mt-5">
             <div class="col-6">
-                <form action="" method="POST">
+                <form action="" method="GET">
                     <div class="input-group pl-3 white rounded-pill">
                         <span class="mt-1">
                             <img src="assets/search_icon.svg" class="text-center" alt="">
                         </span>
                         <input type="text" class="form-control search" placeholder="Cari resep, Kategori, Author" name="cari" />
-                        <button class="btn primary-color px-3 py-2 rounded-pill ml-4" name="btn-cari">Cari</button>
+                        <button class="btn primary-color px-3 py-2 rounded-pill ml-4">Cari</button>
                         <?php
                         if ($status) {
                             echo "<a href=\"index.php\" class=\"btn primary-color px-3 py-2 rounded-pill ml-4\">Refresh Data</a>";
@@ -144,11 +146,11 @@ else {
 
         <div class="row mt-5">
             <div class="col-3">
-                <form action="" method="POST">
+                <form action="" method="GET">
                     <?php foreach ($data as $key => $val) { ?>
-                        <input type="radio" class="kategori" id="kategori<?= $key ?>" name="kategori" value="<?= $val['id'] ?>" data-category="<?= $key ?>">
-                        <button name='btn-kategori' class="no-border text-left no-color 0p 0m">
-                            <label for="kategori<?= $key ?>" class="body-text black-text-color  button-category px-2 py-2 mb-3 rounded-pill" id="labelKategori<?= $key ?>">
+                        <button class="btn btn-sm text-left">
+                            <input type="radio" class="kategori" id="kategori<?= $key ?>" name="kategori" value="<?= $val['id'] ?>" data-category="<?= $key ?>">
+                            <label for="kategori<?= $key ?>" class="body-text black-text-color px-2 py-2 mb-3 button-category rounded-pill" id="labelKategori<?= $key ?>">
                                 <img src="assets/<?= $no++ ?>.svg" class="pr-2" alt="">
                                 <?= $val['nama'] ?>
                             </label>
@@ -163,10 +165,8 @@ else {
                         </label>
                     </div> -->
                 </form>
-
-
-
             </div>
+
             <div class="col-9">
                 <?php
                 $res = $db->query($sql);
@@ -195,8 +195,7 @@ else {
                                     </div>
                                 </div>
                             </a>
-            </div>
-<?php
+                <?php
                         }
                     } else {
                         if ($status) {
@@ -205,9 +204,11 @@ else {
                     }
                 }
 
-?>
+                ?>
+            </div>
         </div>
-
+        <div class="result"></div>
+        <div class=""><?php echo isset($_POST['kategori']); ?></div>
         <!-- Optional JavaScript; choose one of the two! -->
 
         <!-- Option 1: jQuery and Bootstrap Bundle (includes Popper) -->
@@ -222,6 +223,16 @@ else {
     -->
 </body>
 <script type="text/javascript">
+    // $('#id_category').click(function(e) {
+    //     e.stopPropagation();
+    //     // e.defaultPrevented();
+
+    // })
+    // $('.id_category1').click(function(e) {
+    //     // e.defaultPrevented();
+    //     e.stopPropagation();
+
+    // })
     var temp = -1
 
     $('.kategori').change((e) => {

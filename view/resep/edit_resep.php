@@ -73,9 +73,9 @@ if (!isset($_SESSION['id'])) {
           $res = $db->query($sql);
           if ($res) {
             if ($db->affected_rows > 0) {
-              showMessage('success', 'Data Berhasil Di Ubah!');
+              showMessage('success', 'Success', 'check-circle', 'Data Berhasil Di Ubah!');
             } else {
-              showMessage('info', 'Data Tidak Ada Yang Di Ubah!');
+              showMessage('info', 'Info', 'exclamation-triangle', 'Data Tidak Ada Yang Di Ubah!');
             }
           } else {
             echo $db->error;

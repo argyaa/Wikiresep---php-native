@@ -16,7 +16,7 @@ $status = false;
 if (isset($_GET['cari'])) {
     $status = true;
     $cari = $db->escape_string($_GET['cari']);
-    $sql = "SELECT * FROM resep
+    $sql = "SELECT resep.id, judul, konten, username, nama, gambar, deskripsi FROM resep
                     JOIN user ON user.id = resep.id_user
                     JOIN kategori ON kategori.id = resep.id_kategori
                     WHERE judul LIKE '%$cari%'";
@@ -114,11 +114,12 @@ else {
                     <div class="pt-5 pl-5 title-text pb-3">Jangan takut ga bisa masak! <br> Kamu bisa belajar disini!</div>
                     <div class="body-text pl-5 pb-5">Kamu juga bisa jelajahi semua resep atau buat resepmu <br>
                         sendiri dan jadi banyak dikenal orang! </div>
-                    <a href="view/auth/login.php" class="px-4 py-3 ml-5 rounded-pill button-text black-text-color white no-decor" style="visibility: <?php if (!isset($_SESSION['id'])) {
-                                                                                                                                                            echo "none";
-                                                                                                                                                        } else {
-                                                                                                                                                            echo "hidden";
-                                                                                                                                                        } ?>;">Jadilah Terkenal Sekarang!</a>
+                    <a href="view/auth/login.php" class="px-4 py-3 ml-5 rounded-pill button-text black-text-color white no-decor" style="visibility: 
+                    <?php if (!isset($_SESSION['id'])) {
+                        echo "none";
+                    } else {
+                        echo "hidden";
+                    } ?>;">Jadilah Terkenal Sekarang!</a>
                     <div class="pb-1"></div>
                     <img src="assets/hero.svg" class="hero" alt="">
                 </div>

@@ -39,3 +39,13 @@ function getDataResep()
     $res->free();
     return $data;
 }
+
+function getDataUser()
+{
+    $db = dbConnect();
+    $sql = "SELECT * from user";
+    $res = $db->query($sql);
+    $data = $res->fetch_all(MYSQLI_ASSOC);
+    $res->free();
+    return $data;
+}

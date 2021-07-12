@@ -10,8 +10,15 @@ if (isset($_POST['keluar'])) {
     session_destroy();
     header('location: ../index.php');
 }
-$id = $_SESSION['id'];
 $status = false;
+$sql = '';
+if (isset($_POST['btn-cari'])) {
+    $status = true;
+    $cari = $db->escape_string($_POST['cari']);
+    $sql = "SELECT * FROM user WHERE username LIKE '%$cari%'";
+} else {
+    $sql = "SELECT * FROM user";
+}
 
 ?>
 <!doctype html>
@@ -95,6 +102,7 @@ $status = false;
                     showMessage('danger', "DATABASE Error!");
                 }
             }
+            $no = 1;
             ?>
             <table class="table">
                 <thead>
@@ -108,21 +116,29 @@ $status = false;
                 <tbody class="">
                     <form action="" method="get">
                         <?php
-                        $no = 1;
-                        $data = getDataUser();
-                        foreach ($data as $user) {
+                        $res = $db->query($sql);
+                        if ($res) {
+                            if ($res->num_rows > 0) {
+                                $data = $res->fetch_all(MYSQLI_ASSOC);
+                                foreach ($data as $user) {
                         ?>
 
-                            <tr>
-                                <th scope="row"><?php echo $no; ?></th>
-                                <td><?php echo $user['username']; ?></td>
-                                <td><?php echo $user['password']; ?></td>
-                                <td class="">
-                                    <button class="btn btn-sm" name="hapus" value="<?php echo $user['id']; ?>"><img src="../assets/delete.svg"></button>
-                                </td>
-                            </tr>
+                                    <tr>
+                                        <th scope="row"><?php echo $no; ?></th>
+                                        <td><?php echo $user['username']; ?></td>
+                                        <td><?php echo $user['password']; ?></td>
+                                        <td class="">
+                                            <button class="btn btn-sm" name="hapus" value="<?php echo $user['id']; ?>"><img src="../assets/delete.svg"></button>
+                                        </td>
+                                    </tr>
                         <?php
-                            $no++;
+                                    $no++;
+                                }
+                            } else {
+                                showMessage('danger', "Data $cari Tidak Ditemukan!");
+                            }
+                        } else {
+                            showMessage('danger', "DATABASE Error!");
                         }
                         ?>
                     </form>

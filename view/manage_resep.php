@@ -15,7 +15,7 @@ $status = false;
 if (isset($_POST['btn-cari'])) {
     $status = true;
     $cari = $db->escape_string($_POST['cari']);
-    $sql = "SELECT * FROM resep
+    $sql = "SELECT resep.id, judul, konten, username, nama, gambar, deskripsi FROM resep
                     JOIN user ON user.id = resep.id_user
                     JOIN kategori ON kategori.id = resep.id_kategori
                     WHERE judul LIKE '%$cari%'

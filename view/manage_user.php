@@ -3,7 +3,7 @@ include_once('../service/koneksi.php');
 include_once('../service/error.php');
 $db = dbConnect();
 session_start();
-if (!isset($_SESSION['id'])) {
+if (!isset($_SESSION['id']) || $_SESSION['username'] != "admin") {
     header('location: ../index.php');
 }
 if (isset($_POST['keluar'])) {
@@ -47,7 +47,9 @@ $status = false;
                         Hai, <?php echo $_SESSION['username']; ?>
                     </button>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item" href="manage_user.php" name="kelola-user">Kelola User</a>
+                        <?php if ($_SESSION['username'] == "admin") { ?>
+                            <a class="dropdown-item" href="manage_user.php" name="kelola-user">Kelola User</a>
+                        <?php } ?>
                         <a class="dropdown-item" href="manage_resep.php" name="kelola-resep">Kelola Resep</a>
                         <button class="dropdown-item" href="" name="keluar">Keluar</button>
                     </div>
@@ -68,7 +70,7 @@ $status = false;
                     <button class="btn primary-color px-3 py-2 rounded-pill ml-4" name="btn-cari">Cari</button>
                     <?php
                     if ($status) {
-                        echo "<a href=\"manage_resep.php\" class=\"btn primary-color px-3 py-2 rounded-pill ml-4\">Refresh Data</a>";
+                        echo "<a href=\"manage_user.php\" class=\"btn primary-color px-3 py-2 rounded-pill ml-4\">Refresh Data</a>";
                     }
                     ?>
                 </div>
@@ -78,6 +80,22 @@ $status = false;
     </div>
     <div class="row justify-content-center  ">
         <div class="container-regis mt-5">
+            <?php
+            if (isset($_GET['hapus'])) {
+                $id = $db->escape_string($_GET['hapus']);
+                $sql = "DELETE FROM user WHERE id = $id";
+                $res = $db->query($sql);
+                if ($res) {
+                    if ($db->affected_rows > 0) {
+                        showMessage('success', "Data Berhasil Dihapus!");
+                    } else {
+                        showMessage('warning', "Data Gagal Dihapus!");
+                    }
+                } else {
+                    showMessage('danger', "DATABASE Error!");
+                }
+            }
+            ?>
             <table class="table">
                 <thead>
                     <tr class="primary-color text-white">
@@ -87,20 +105,27 @@ $status = false;
                         <th scope="col">aksi</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>gya</td>
-                        <td>gya</td>
-                        <td><a href="" class="no-decor"><img src="../assets/delete.svg"></a></td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>dandi</td>
-                        <td>dandi</td>
-                        <td><a href="" class="no-decor"><img src="../assets/delete.svg"></a></td>
-                    </tr>
+                <tbody class="">
+                    <form action="" method="get">
+                        <?php
+                        $no = 1;
+                        $data = getDataUser();
+                        foreach ($data as $user) {
+                        ?>
 
+                            <tr>
+                                <th scope="row"><?php echo $no; ?></th>
+                                <td><?php echo $user['username']; ?></td>
+                                <td><?php echo $user['password']; ?></td>
+                                <td class="">
+                                    <button class="btn btn-sm" name="hapus" value="<?php echo $user['id']; ?>"><img src="../assets/delete.svg"></button>
+                                </td>
+                            </tr>
+                        <?php
+                            $no++;
+                        }
+                        ?>
+                    </form>
                 </tbody>
             </table>
         </div>

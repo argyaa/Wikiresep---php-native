@@ -151,7 +151,7 @@ else {
                     <?php foreach ($data as $key => $val) { ?>
                         <button class="btn btn-sm text-left">
                             <input type="radio" class="kategori" id="kategori<?= $key ?>" name="kategori" value="<?= $val['id'] ?>" data-category="<?= $key ?>">
-                            <label for="kategori<?= $key ?>" class="body-text black-text-color px-2 py-2 mb-3 button-category rounded-pill <?= (($_SERVER['REQUEST_URI'] == "/index.php" || $_SERVER['REQUEST_URI'] == "/" && $no == 0) ? 'radio-active' : ($_GET['kategori'] == $no + 1 ? 'radio-active' : '')) ?>" id="labelKategori<?= $key ?>">
+                            <label for="kategori<?= $key ?>" class="body-text black-text-color px-2 py-2 mb-3 button-category rounded-pill <?= ((($_SERVER['REQUEST_URI'] == "/index.php" || $_SERVER['REQUEST_URI'] == "/") && $no == 0) ? 'radio-active' : ($_GET['kategori'] == $no + 1 ? 'radio-active' : '')) ?>" id="labelKategori<?= $key ?>">
                                 <img src="assets/<?= $no++ ?>.svg" class="pr-2" alt="">
                                 <?= $val['nama'] ?>
                             </label>
